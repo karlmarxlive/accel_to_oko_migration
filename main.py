@@ -34,7 +34,7 @@ class OkoAPI:
         }
 
     def create_contact(self, contact_data: Dict) -> Dict:
-        endpoint = '/contacts'
+        endpoint = '/contacts/'
         return self._make_request('POST', endpoint, data=contact_data)
     
     def _make_request(self, method, endpoint: str, params: Dict = None, data: Dict = None) -> dict:
@@ -54,19 +54,28 @@ class OkoAPI:
             if hasattr(e, 'response') and hasattr(e.response, 'text'):
                 logger.error(f"Response text: {e.response.text}")
             return {}
-        
-#def main():
-logger.info("Начало тестирования. Создаю контакт в Oko")
-oko_api = OkoAPI(OKO_API_URL, OKO_API_TOKEN)
-payload = {'name': 'Lana Raynor',
-        'user_id': '1',
-        'phones[][phone]': '568-371-6852',
-        'emails[][email]': 'Bonita.Wuckert37@gmail.com',
-        'tags[]': 'partnerships'}
-response = oko_api.create_contact(payload)
-logger.info("Контакт создан")
-logger.info(response)
-logger.info("Тестирование завершено")
 
-# if __name__ == "__main__":
-#     main()
+class AccelAPI:
+    def __init__(self, base_url, token):
+        self.token = token
+        self.base_url = base_url
+        self.headers = {
+            "Accept": "application/json",
+            "Authorization": f"Bearer {self.token}"
+        }
+
+
+def main():
+    logger.info("Начало тестирования. Создаю контакт в Oko")
+    oko_api = OkoAPI(OKO_API_URL, OKO_API_TOKEN)
+    payload = {'name': 'Lana Raynor',
+            'phones[][phone]': '568-371-6852',
+            'emails[][email]': 'Bonita.Wuckert37@gmail.com',
+            'tags[]': 'partnerships'}
+    response = oko_api.create_contact(payload)
+    logger.info("Контакт создан")
+    logger.info(response)
+    logger.info("Тестирование завершено")
+
+if __name__ == "__main__":
+    main()
